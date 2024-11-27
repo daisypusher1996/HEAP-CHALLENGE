@@ -1,8 +1,4 @@
 
-Theme: Magical Inventory Management
-The task is to manage a wizard's collection of magical artifacts, ranked by their magical power, using Max-Heaps and Min-Heaps. Participants will perform heap operations to maintain and manipulate this inventory.
-
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
