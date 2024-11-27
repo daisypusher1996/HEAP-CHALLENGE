@@ -1,0 +1,123 @@
+
+Theme: Magical Inventory Management
+The task is to manage a wizard's collection of magical artifacts, ranked by their magical power, using Max-Heaps and Min-Heaps. Participants will perform heap operations to maintain and manipulate this inventory.
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// Helper function to print the heap
+void printHeap(const vector<int>& heap, const string& message) {
+    cout << message << endl;
+    for (int val : heap) {
+        cout << val << " ";
+    }
+    cout << endl;
+}
+
+// Task 1: Insert elements into the heap and maintain heap property
+void insertElement(vector<int>& heap, int element, bool isMaxHeap) {
+    heap.push_back(element);
+    int idx = heap.size() - 1;
+
+    // Heapify up
+    while (idx > 0) {
+        int parentIdx = (idx - 1) / 2;
+        if ((isMaxHeap && heap[idx] > heap[parentIdx]) || (!isMaxHeap && heap[idx] < heap[parentIdx])) {
+            swap(heap[idx], heap[parentIdx]);
+            idx = parentIdx;
+        } else {
+            break;
+        }
+    }
+}
+
+// Task 2: Remove root element (Max or Min) and re-heapify
+void removeRoot(vector<int>& heap, bool isMaxHeap) {
+    if (heap.empty()) {
+        cout << "Heap is empty!" << endl;
+        return;
+    }
+
+    cout << "Removing the root element: " << heap[0] << endl;
+    heap[0] = heap.back();
+    heap.pop_back();
+
+    // Heapify down
+    int idx = 0;
+    while (idx < heap.size()) {
+        int leftChild = 2 * idx + 1;
+        int rightChild = 2 * idx + 2;
+        int swapIdx = idx;
+
+        if (leftChild < heap.size() && ((isMaxHeap && heap[leftChild] > heap[swapIdx]) || (!isMaxHeap && heap[leftChild] < heap[swapIdx]))) {
+            swapIdx = leftChild;
+        }
+
+        if (rightChild < heap.size() && ((isMaxHeap && heap[rightChild] > heap[swapIdx]) || (!isMaxHeap && heap[rightChild] < heap[swapIdx]))) {
+            swapIdx = rightChild;
+        }
+
+        if (swapIdx == idx) break;
+
+        swap(heap[idx], heap[swapIdx]);
+        idx = swapIdx;
+    }
+}
+
+// Task 3: Heapify a random array
+void heapify(vector<int>& arr, bool isMaxHeap) {
+    for (int i = arr.size() / 2 - 1; i >= 0; --i) {
+        int idx = i;
+
+        while (idx < arr.size()) {
+            int leftChild = 2 * idx + 1;
+            int rightChild = 2 * idx + 2;
+            int swapIdx = idx;
+
+            if (leftChild < arr.size() && ((isMaxHeap && arr[leftChild] > arr[swapIdx]) || (!isMaxHeap && arr[leftChild] < arr[swapIdx]))) {
+                swapIdx = leftChild;
+            }
+
+            if (rightChild < arr.size() && ((isMaxHeap && arr[rightChild] > arr[swapIdx]) || (!isMaxHeap && arr[rightChild] < arr[swapIdx]))) {
+                swapIdx = rightChild;
+            }
+
+            if (swapIdx == idx) break;
+
+            swap(arr[idx], arr[swapIdx]);
+            idx = swapIdx;
+        }
+    }
+}
+
+int main() {
+    vector<int> heap;
+    bool isMaxHeap = true; // Change to false for Min-Heap
+    string heapType = isMaxHeap ? "Max-Heap" : "Min-Heap";
+
+    cout << "Welcome to Magical Inventory Management!" << endl;
+
+    // Task 1: Insert elements
+    insertElement(heap, 50, isMaxHeap);
+    printHeap(heap, "Inserted artifact with power level 50:");
+
+    insertElement(heap, 30, isMaxHeap);
+    printHeap(heap, "Inserted artifact with power level 30:");
+
+    insertElement(heap, 70, isMaxHeap);
+    printHeap(heap, "Inserted artifact with power level 70:");
+
+    // Task 2: Remove root
+    removeRoot(heap, isMaxHeap);
+    printHeap(heap, "Heap after removing root:");
+
+    // Task 3: Heapify a random array
+    vector<int> randomArray = {15, 40, 10, 60, 20};
+    cout << "\nConverting random array into a " << heapType << "..." << endl;
+    heapify(randomArray, isMaxHeap);
+    printHeap(randomArray, "Heapified array:");
+    return 0;
+}
